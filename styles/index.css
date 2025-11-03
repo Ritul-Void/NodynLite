@@ -1,0 +1,18 @@
+@import url(./universal/reset.css);
+
+
+
+
+
+@import url(./components/sidebar.css);
+@import url(./components/editor.css);
+
+
+  body {
+        margin: 0;
+        display: flex;
+        height: 100vh;
+        font-family: system-ui, sans-serif;
+        background: #f5f5f5;
+        color: #222;
+      }
