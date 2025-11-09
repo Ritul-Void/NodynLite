@@ -6,3 +6,6 @@ yes DevlopeRment !
 
 
 
+install transformers js for futher making 
+
+

@@ -1,0 +1,46 @@
+/* Editor */
+      .editor {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 1rem;
+        background: #121212;
+      }
+      .editor input {
+        font-size: 1.2rem;
+        padding: 0.5rem;
+        border: none;
+        /* border-bottom: 2px solid #ccc; */
+        margin-bottom: 0.75rem;
+        outline: none;
+        border-radius: 12px;
+        background: #1a1a1a;
+        color: white;
+        text-align: center;
+      }
+      .editor textarea {
+        flex: 1;
+        padding: 0.75rem;
+        border: none;
+        border-radius: 6px;
+        resize: none;
+        font-size: 1rem;
+        color: white;
+        outline: none;
+        line-height: 1.5;
+        background: #1a1a1a;
+      }
+      .delete-btn {
+        background: #e53935;
+        color: white;
+        border: none;
+        margin-top: 0.75rem;
+        padding: 0.6rem;
+        border-radius: 6px;
+        cursor: pointer;
+        width: 120px;
+        font-weight: bold;
+      }
+      .delete-btn:hover {
+        background: #d32f2f;
+      }

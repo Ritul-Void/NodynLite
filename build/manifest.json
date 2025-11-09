@@ -1,0 +1,58 @@
+{
+  "manifest_version": 3,
+  "name": "Knowledge Base Extension",
+  "version": "1.0",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
+    "sidePanel",
+    "declarativeNetRequest"
+  ],
+  "host_permissions": [
+    "<all_urls>",
+    "https://huggingface.co/*",
+    "https://*.huggingface.co/*",
+    "https://*.hf.co/*",
+    "https://cdn.jsdelivr.net/*",
+    "https://generativelanguage.googleapis.com/*",
+    "http://127.0.0.1:11434/*",
+    "http://127.0.0.1:11434/api/tags",
+    "http://127.0.0.1:11434/api/generate",
+    "http://192.168.1.101:11434/*"
+  ],
+  "side_panel": {
+    "default_path": "sidebar.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "lib/Readability.js",
+        "contentScript.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_title": "Open Knowledge Base"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; connect-src 'self' https://api.anthropic.com https://huggingface.co https://*.huggingface.co https://*.hf.co https://cdn.jsdelivr.net https://generativelanguage.googleapis.com http://127.0.0.1:11434/* http://127.0.0.1:11434/api/tags http://127.0.0.1:11434/api/generate http://192.168.1.101:11434/* http://192.168.1.101:11434/api/generate http://192.168.1.101:11434/api/tags;"
+  },
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "ollama_rules",
+        "enabled": true,
+        "path": "rules.json"
+      }
+    ]
+  },
+  "background": {
+    "service_worker": "service_worker.js",
+    "type": "module"
+  }
+}

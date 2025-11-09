@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; script-src 'self' 'wasm-unsafe-eval' https://huggingface.co; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://huggingface.co https://*.huggingface.co https://*.hf.co https://cdn.jsdelivr.net https://generativelanguage.googleapis.com http://127.0.0.1:11434 http://192.168.1.101:11434;">
+    <style>
+              :root {
+            --primary: #4f46e5;
+            --primary-hover: #6366f1;
+            --bg-body: rgba(20, 20, 30, 0.9);
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --text-main: #f1f5f9;
+            --text-muted: #a1a8c0;
+            --border: rgba(255,255,255,0.1);
+            --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.2);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.25);
+            --radius-lg: 12px;
+            --radius-md: 8px;
+            --radius-sm: 6px;
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; outline:none; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-size: 14px;
+            background: transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Gradient background */
+        #sidebarGradient {
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+            backdrop-filter: blur(12px);
+            background: #000000ad;
+        }
+
+        #sidebarGradient .meshgradient>.color {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transform: scale(3);
+            background-repeat: no-repeat;
+            mix-blend-mode: overlay;
+        }
+
+        #sidebarGradient .c1 { background: radial-gradient(#ec8123 25%, transparent 50%); background-size:60% 80%; animation: c1 8s infinite linear; }
+        #sidebarGradient .c2 { background: radial-gradient(#4f8c83 25%, transparent 50%); background-size:70% 80%; animation: c2 10s infinite linear; }
+        #sidebarGradient .c3 { background: radial-gradient(#4f8c83 25%, transparent 50%); background-size:80% 80%; animation: c3 5s infinite linear; }
+        #sidebarGradient .c4 { background: radial-gradient(#efbdc8 25%, transparent 50%); background-size:80% 80%; animation: c4 6s infinite linear; }
+
+        @keyframes c1 {50%{background-size:80% 80%;background-position:50% 100%;transform:scale(3) rotate(-75deg);} }
+        @keyframes c2 {50%{background-size:80% 80%;background-position:50% 0;transform:scale(3) rotate(90deg);} }
+        @keyframes c3 {50%{background-size:70% 80%;background-position:0 100%;transform:scale(3) rotate(8deg);} }
+        @keyframes c4 {50%{background-position:0 0;transform:scale(3) rotate(-36deg);} }
+
+        /* Header */
+        #header {
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(10px);
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            z-index: 10;
+        }
+
+        #updateKB {
+            position: relative;
+            overflow: hidden;
+            background: var(--primary);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 6px;
+            cursor: pointer;
+        }
+
+        #updateKB::before {
+            content:'';
+            position:absolute; top:50%; left:50%;
+            width:300%; height:500%;
+            border-radius:50%;
+            background: conic-gradient(#ffffff 0deg 30deg, transparent 30deg 360deg);
+            transform:translate(-50%,-50%);
+            z-index:-2;
+            animation: rotate 3s linear infinite;
+        }
+
+        #updateKB::after {
+            content:'';
+            position:absolute; top:2px; left:2px; right:2px; bottom:2px;
+            background: rgba(0,0,0,0.1);
+            border-radius: var(--radius-md);
+            z-index:-1;
+        }
+
+        @keyframes rotate {0%{transform:translate(-50%,-50%) rotate(0deg);}100%{transform:translate(-50%,-50%) rotate(360deg);} }
+
+        #loadingStatus {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            background: rgba(79, 70, 229,0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: none;
+        }
+
+        /* Chat Area */
+        #chat {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            scroll-behavior: smooth;
+            backdrop-filter: blur(12px);
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+        }
+
+        #chat::-webkit-scrollbar { width: 6px; }
+        #chat::-webkit-scrollbar-track { background: transparent; }
+        #chat::-webkit-scrollbar-thumb { background-color: rgba(255,255,255,0.2); border-radius:20px;}
+
+        .msg {
+            padding: 12px 16px;
+            border-radius: var(--radius-lg);
+            max-width: 85%;
+            word-wrap: break-word;
+            position: relative;
+            font-size: 14px;
+            backdrop-filter: blur(6px);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
+            color: white;
+        }
+
+        .assistant { align-self: flex-start; }
+
+        /* Input Section */
+        #inputSection {
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            border-radius: var(--radius-md);
+        }
+
+        #userInput {
+            flex:1;
+            padding:10px 14px;
+            border-radius: 20px;
+            border:1px solid var(--border);
+            background: rgba(255,255,255,0.05);
+            color: var(--text-main);
+        }
+
+       #userInput:focus {
+    background: #4300000d;
+    border-color: #535353;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+        #sendBtn, #settingsBtn {
+            background: transparent;
+            color: var(--text-muted);
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        #sendBtn {
+            background: var(--primary);
+            color: white;
+        }
+
+        #sendBtn:hover {
+            background: var(--primary-hover);
+            transform: scale(1.05);
+        }
+
+        #settingsBtn:hover {
+            background: var(--bg-body);
+            color: var(--text-main);
+        }
+
+        /* --- Settings Dialog --- */
+        dialog {
+            border: none;
+            padding: 0;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            background: var(--bg-card);
+            color: var(--text-main);
+            width: 90%;
+            max-width: 400px;
+            margin: auto;
+            font-family: inherit;
+        }
+
+        dialog::backdrop {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(2px);
+        }
+
+        .dialog-content {
+            padding: 24px;
+        }
+
+        dialog h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-main);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 12px;
+        }
+
+        .radio-group, .option-group {
+            margin-bottom: 20px;
+        }
+        
+        /* Modern styling for sections in dialog */
+        .radio-group label:first-child, 
+        .option-group label:first-child {
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .radio-group label:not(:first-child) {
+            display: flex;
+            align-items: center;
+            margin: 6px 0;
+            padding: 8px 12px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .radio-group label:not(:first-child):hover {
+            background: var(--bg-body);
+        }
+
+        .radio-group input[type="radio"] {
+            margin-right: 10px;
+            accent-color: var(--primary);
+        }
+
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-family: inherit;
+            margin-top: 6px;
+            margin-bottom: 12px;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus, select:focus {
+            border-color: var(--primary);
+        }
+
+        /* Dialog Actions */
+        .dialog-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        button#saveSettings {
+            background: var(--primary);
+            color: white;
+            border-radius: var(--radius-md);
+            font-weight: 500;
+        }
+
+        button[data-close-settings] {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+        }
+        
+        button#saveSettings:hover { background: var(--primary-hover); }
+        button[data-close-settings]:hover { background: var(--bg-body); color: var(--text-main); }
+
+        .hidden { display: none; }
+
+        /* --- Custom Notification System (New) --- */
+        #notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none; /* Let clicks pass through */
+        }
+
+        .toast {
+            background: var(--bg-card);
+            color: var(--text-main);
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            border-left: 4px solid var(--primary);
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 250px;
+            animation: slideIn 0.3s ease forwards;
+            pointer-events: auto;
+        }
+
+        .toast.success { border-left-color: #10b981; }
+        .toast.error { border-left-color: #ef4444; }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; transform: translateY(-10px); }
+        }
+
+        /* SVG Sizing */
+        svg { width: 20px; height: 20px; }
+    </style>
+</head>
+
+<body>
+     <div id="sidebarGradient">
+        <div class="meshgradient">
+            <div class="color c1"></div>
+            <div class="color c2"></div>
+            <div class="color c3"></div>
+            <div class="color c4"></div>
+        </div>
+    </div>
+    <div id="notification-container"></div>
+
+    <div id="header">
+        <div style="font-weight:700; font-size:16px; color:var(--text-main);">AI Assistant</div>
+        <div style="display:flex; align-items:center; gap:8px;">
+            <div id="loadingStatus">Processing...</div>
+            <button id="updateKB" title="Update Knowledge Base">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="icon icon-tabler icons-tabler-outline icon-tabler-refresh">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" />
+                    <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <div id="chat">
+        <div class="msg assistant" style="align-self: center; background: transparent; border: none; box-shadow: none; color: var(--text-muted); text-align: center; margin-top: 40px;">
+            <svg xmlns="http://www.w3.org/2000/svg" style="width: 48px; height: 48px; opacity: 0.5; margin-bottom: 10px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 9h8" /><path d="M8 13h6" /><path d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12z" /></svg>
+            <div>How can I help you today?</div>
+        </div>
+    </div>
+
+    <div id="inputSection">
+        <button id="settingsBtn" title="Settings">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="icon icon-tabler icons-tabler-outline icon-tabler-settings">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c.996 .608 2.296 .07 2.572 -1.065z" />
+                <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+            </svg>
+        </button>
+        <input type="text" id="userInput" placeholder="Ask a question..." autocomplete="off">
+        <button id="sendBtn" title="Send">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-up">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M12 5l0 14" />
+                <path d="M18 11l-6 -6" />
+                <path d="M6 11l6 -6" />
+            </svg>
+        </button>
+    </div>
+
+    <dialog id="settingsDialog">
+        <div class="dialog-content">
+            <h3>Configuration</h3>
+            <div class="radio-group">
+                <label>Embedding Model</label>
+                <label><input type="radio" name="embeddingModel" value="Xenova/all-MiniLM-L2-v2"> All MiniLM L2 (Ultra-fast)</label>
+                <label><input type="radio" name="embeddingModel" value="Xenova/all-MiniLM-L6-v2" checked> All MiniLM L6 (Quality)</label>
+                <label><input type="radio" name="embeddingModel" value="Xenova/gte-small"> GTE Small (Long inputs)</label>
+                <label><input type="radio" name="embeddingModel" value="Xenova/e5-small-v2"> E5 Small v2 (Asymmetric)</label>
+                <label><input type="radio" name="embeddingModel" value="Xenova/paraphrase-MiniLM-L3-v2"> Paraphrase MiniLM (Balanced)</label>
+                <label><input type="radio" name="embeddingModel" value="Xenova/bge-small-en-v1.5"> BGE Small (Top Retrieval)</label>
+            </div>
+            
+            <hr style="border: 0; border-top: 1px solid var(--border); margin: 15px 0;">
+
+            <div class="radio-group">
+                <label>API Provider</label>
+                <label><input type="radio" name="apiProvider" value="none" checked> None (Local)</label>
+                <label><input type="radio" name="apiProvider" value="gemini"> Google Gemini</label>
+                <label><input type="radio" name="apiProvider" value="ollama"> Ollama (Local LLM)</label>
+            </div>
+
+            <div id="geminiOptions" class="option-group hidden">
+                <label for="apiKey">Gemini API Key</label>
+                <input type="text" id="apiKey" placeholder="Enter API Key">
+                <label for="maxOutputTokens">Max Output Tokens</label>
+                <input type="number" id="maxOutputTokens" value="1024" min="1" max="2048">
+            </div>
+
+            <div id="ollamaOptions" class="option-group hidden">
+                <label for="ollamaModel">Ollama Model</label>
+                <select id="ollamaModel"></select>
+                <label for="ollamaBaseUrl">Ollama Base URL:</label>
+                <input type="text" id="ollamaBaseUrl" placeholder="http://127.0.0.1:11434" />
+            </div>
+
+            <div class="dialog-actions">
+                <button data-close-settings>Cancel</button>
+                <button id="saveSettings">Save Changes</button>
+            </div>
+        </div>
+    </dialog>
+
+
+
+    <script src="./lib/purify.min.js"></script>
+    <script type="module" src="./sidebar.js"></script>
+</body>
+</html>

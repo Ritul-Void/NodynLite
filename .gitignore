@@ -1,0 +1,7 @@
+.well-known/
+*devtool.json
+./vscode/
+*.code-workspace
+text/
+node_modules/
+.local/

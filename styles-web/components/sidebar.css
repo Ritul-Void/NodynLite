@@ -1,0 +1,53 @@
+      /* Sidebar */
+      .sidebar {
+        width: 250px;
+        background: #000000;
+        color: white;
+        backdrop-filter: blur(28px);
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid #ffffff2e;
+      }
+      .sidebar-header {
+        padding: 1rem;
+        font-weight: bold;
+        font-size: 1.2rem;
+        border-bottom: 1px solid #444;
+      }
+      .notes-list {
+        flex: 1;
+        overflow-y: auto;
+        background: #0000001c;
+        backdrop-filter: blur(10px);
+      }
+      .note-item {
+        padding: 0.75rem 1rem;
+        cursor: pointer;
+        border-bottom: 1px solid #333;
+        background: #ffffff1c;
+        backdrop-filter: blur(5px);
+        /* margin-top: 5px; */
+      }
+      .note-item:hover,
+      .note-item.active {
+        background: #444;
+      }
+      .new-note-btn {
+        background: #000000;
+        color: white;
+        border: none;
+        margin: 1rem;
+        padding: 0.75rem;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: bold;
+        /* transition: 0.2s; */
+      }
+      .new-note-btn:hover {
+        background: #ffffff;
+        color: rgb(255, 255, 255);
+      }
+
+      .new-note-btn:hover .new-note-btn::after{
+        background-color: #ffffff;
+      }

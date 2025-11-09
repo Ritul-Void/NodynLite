@@ -5,23 +5,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <link rel="stylesheet" href="./styles/index.css">
+  <link rel="stylesheet" href="./styles-web/index.css">
   <title>Nodyn Lite</title>
   <style>
-    /* === Sidebar container === */
+  
     .sidebar-container {
       position: absolute;
       top: 0;
       left: 0;
       width: 280px;
-      /* adjust sidebar width */
+
       height: 100vh;
       overflow: hidden;
       z-index: 1;
-      /* adjust layering */
+  
     }
 
-    /* === Existing gradient animation === */
     .gradient-wrap {
       overflow: hidden;
       width: 100%;
@@ -123,17 +122,17 @@
       top: 50%;
       left: 50%;
       width: 300%;
-      /* much bigger than button */
+   
       height: 500%;
       border-radius: 50%;
       transform: translate(-50%, -50%);
       background: conic-gradient(#ffffff 0deg 30deg, transparent 30deg 360deg);
       z-index: -2;
-      /* behind button and ::after */
+
       animation: rotate 3s linear infinite;
     }
 
-    /* Inner box to hide center, creating border effect */
+   
     button.glow-border::after {
       content: '';
       position: absolute;
@@ -142,9 +141,8 @@
       right: 3px;
       bottom: 3px;
       background: #111;
-      /* same as button background */
       border-radius: 9px;
-      /* slightly smaller than button */
+      
       z-index: -1;
     }
 
@@ -186,7 +184,7 @@
     <button class="delete-btn" id="deleteNoteBtn">Delete</button>
   </div>
 
-  <script src="./scripts/index.js"></script>
+  <script src="./scripts-web/index.js"></script>
 </body>
 
 </html>
