@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KnowledgeFox Settings</title>
+
+    
+    <link rel="stylesheet" href="popup.css" />
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="logo">🦊</span>
+            <h1>KnowledgeFox</h1>
+        </div>
+        <p class="subtitle">Settings &amp; Configuration</p>
+
+        <section class="section">
+            <label class="label" for="model-select">Embedding Model</label>
+            <select id="model-select" class="select"></select>
+            <p class="hint" id="model-status"></p>
+        </section>
+
+        <section class="section">
+            <label class="label" for="inference-select">Inference Model</label>
+            <select id="inference-select" class="select">
+                <option value="gemini-nano">Gemini Nano</option>
+            </select>
+            <p class="hint" id="inference-status">Gemini Nano (Chrome built-in)</p>
+        </section>
+
+        <section class="section">
+            <label class="label">Status</label>
+            <p class="hint" id="status-text">Loading…</p>
+        </section>
+
+        <footer class="footer">
+            <small>Powered by <strong>Transformers.js</strong></small>
+        </footer>
+    </div>
+</body>
+
+</html>

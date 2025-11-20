@@ -1,10 +1,26 @@
 {
+  "name": "knowledgefox",
+  "version": "0.1.0",
+  "description": "KnowledgeFox — intelligent page ingestion and semantic retrieval powered by Transformers.js",
+  "scripts": {
+    "build": "webpack",
+    "dev": "webpack --watch"
+  },
+  "type": "module",
+  "author": "Xenova",
+  "license": "MIT",
   "devDependencies": {
-    "copy-webpack-plugin": "^13.0.1",
-    "webpack": "^5.104.1",
+    "copy-webpack-plugin": "^11.0.0",
+    "html-webpack-plugin": "^5.5.1",
+    "webpack": "^5.79.0",
     "webpack-cli": "^6.0.1"
   },
   "dependencies": {
-    "@huggingface/transformers": "^3.8.1"
+    "@babel/cli": "^7.28.6",
+    "@babel/core": "^7.29.0",
+    "@huggingface/transformers": "^3.4.0",
+    "@mozilla/readability": "^0.6.0",
+    "strip-comments": "^2.0.1",
+    "strip-css-comments": "^5.0.0"
   }
 }

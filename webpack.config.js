@@ -1,58 +1,55 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
+
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-export default {
-  mode: 'development',
-  devtool: false,
-
-  entry: {
-    service_worker: './service_worker.js',
-    sidebar: './sidebar.js',
-    contentScript: './contentScript.js'
-  },
-
-  output: {
-    path: path.resolve(__dirname, 'build'),
-    filename: '[name].js',
-    chunkLoading: 'import-scripts',
-    chunkFormat: 'array-push',
-    module: true,
-    library: {
-      type: 'module'
-    }
-  },
-
-  target: 'webworker',
-
-  experiments: {
-    outputModule: true
-  },
-
-  resolve: {
-    extensions: ['.js']
-  },
-
-  plugins: [
-    new CopyPlugin({
-      patterns: [
-        { from: 'manifest.json', to: '.' },
-        { from: 'rules.json', to: '.' },
-        { from: 'sidebar.html', to: '.' },
-        { from: 'lib', to: 'lib' },
-        { from: 'text', to: 'text' }
-      ]
-    })
-  ],
-
-  optimization: {
-    splitChunks: false
-  },
-
-  performance: {
-    hints: false
-  }
+const config = {
+    mode: 'development',
+    devtool: 'inline-source-map',
+    entry: {
+        background: {
+            import: './src/background.js',
+            chunkLoading: `import-scripts`,
+        },
+        popup: './src/popup.js',
+        content: './src/content.js',
+        sidepanel: './src/sidepanel.js',
+    },
+    output: {
+        path: path.resolve(__dirname, 'build').replace(/!/g, ''),
+        filename: '[name].js',
+    },
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: './src/popup.html',
+            filename: 'popup.html',
+            chunks: ['popup'],
+        }),
+        new HtmlWebpackPlugin({
+            template: './src/sidepanel.html',
+            filename: 'sidepanel.html',
+            chunks: ['sidepanel'],
+        }),
+        new CopyPlugin({
+            patterns: [
+                {
+                    from: "public",
+                    to: "." // Copies to build folder
+                },
+                {
+                    from: "src/popup.css",
+                    to: "popup.css"
+                },
+                {
+                    from: "src/sidepanel.css",
+                    to: "sidepanel.css"
+                }
+            ],
+        })
+    ],
 };
+
+export default config;

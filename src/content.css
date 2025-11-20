@@ -1,0 +1,310 @@
+
+
+
+#kfox-root {
+    all: initial;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    font-size: 14px;
+    color: #1a1a2e;
+    z-index: 2147483647;
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+}
+
+
+#kfox-fab {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+    color: #fff;
+    font-size: 26px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(255, 107, 53, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+}
+
+#kfox-fab:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.55);
+}
+
+#kfox-fab .kfox-fab-icon {
+    line-height: 1;
+    pointer-events: none;
+}
+
+
+#kfox-panel {
+    display: none;
+    flex-direction: column;
+    width: 360px;
+    max-height: 520px;
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+    margin-bottom: 12px;
+    border: 1px solid #e8e8ef;
+}
+
+#kfox-panel.kfox-open {
+    display: flex;
+}
+
+
+#kfox-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: #fff;
+}
+
+#kfox-header .kfox-title {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+#kfox-header .kfox-controls {
+    display: flex;
+    gap: 8px;
+}
+
+#kfox-header .kfox-controls button {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    transition: background 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#kfox-header .kfox-controls button:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+
+#kfox-status {
+    padding: 6px 16px;
+    font-size: 12px;
+    color: #666;
+    background: #f7f7fa;
+    border-bottom: 1px solid #e8e8ef;
+    min-height: 28px;
+}
+
+
+#kfox-chat {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 200px;
+    max-height: 320px;
+    background: #fafafa;
+}
+
+.kfox-msg {
+    padding: 8px 12px;
+    border-radius: 10px;
+    max-width: 88%;
+    word-wrap: break-word;
+    line-height: 1.45;
+    font-size: 13px;
+}
+
+.kfox-msg.kfox-user {
+    align-self: flex-end;
+    background: #ff6b35;
+    color: #fff;
+    border-bottom-right-radius: 3px;
+}
+
+.kfox-msg.kfox-bot {
+    align-self: flex-start;
+    background: #e8e8ef;
+    color: #1a1a2e;
+    border-bottom-left-radius: 3px;
+}
+
+
+#kfox-input-area {
+    display: flex;
+    padding: 10px 12px;
+    border-top: 1px solid #e8e8ef;
+    background: #fff;
+    gap: 8px;
+}
+
+#kfox-input {
+    flex: 1;
+    border: 1px solid #d0d0da;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.15s;
+}
+
+#kfox-input:focus {
+    border-color: #ff6b35;
+}
+
+#kfox-send-btn {
+    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+    border: none;
+    color: #fff;
+    border-radius: 8px;
+    padding: 8px 14px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: opacity 0.15s;
+}
+
+#kfox-send-btn:hover {
+    opacity: 0.88;
+}
+
+
+#kfox-info-tooltip {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    background: #1a1a2e;
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    white-space: nowrap;
+    margin-bottom: 6px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+#kfox-info-tooltip.kfox-show {
+    display: block;
+}
+
+
+.kfox-spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 107, 53, 0.3);
+    border-top-color: #ff6b35;
+    border-radius: 50%;
+    animation: kfox-spin 0.6s linear infinite;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+@keyframes kfox-spin {
+    to { transform: rotate(360deg); }
+}
+
+
+.kfox-citations {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px 0;
+    margin-top: 8px;
+}
+
+.kfox-citation-pill {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 24px;
+    padding: 0 8px;
+    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    user-select: none;
+}
+
+.kfox-citation-pill:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(255, 107, 53, 0.4);
+}
+
+
+.kfox-citation-tooltip {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 280px;
+    max-width: 90vw;
+    background: #1a1a2e;
+    color: #fff;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    z-index: 10000;
+    font-size: 12px;
+    line-height: 1.4;
+    text-align: left;
+    pointer-events: none;
+}
+
+.kfox-citation-pill:hover .kfox-citation-tooltip,
+.kfox-citation-pill:focus .kfox-citation-tooltip {
+    display: block;
+}
+
+.kfox-tooltip-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.kfox-tooltip-score {
+    font-size: 10px;
+    color: #f7931e;
+    font-weight: 600;
+}
+
+.kfox-tooltip-text {
+    margin-bottom: 6px;
+    max-height: 120px;
+    overflow-y: auto;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #e8e8e8;
+}
+
+.kfox-tooltip-meta {
+    font-size: 10px;
+    color: #999;
+    font-style: italic;
+}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KnowledgeFox</title>
+    <link rel="stylesheet" href="sidepanel.css" />
+</head>
+
+<body>
+    <div id="kfox-app">
+        
+        <header id="kfox-header">
+            <div class="kfox-title-row">
+                <span class="kfox-logo"><img src="../build/icons/icon.png" alt=""></span>
+                <h1 class="kfox-title">KnowledgeFox</h1>
+            </div>
+            <div class="kfox-controls">
+                <button id="kfox-btn-ingest" title="Ingest this page">&#9654;</button>
+                <button id="kfox-btn-clear" title="Clear vectors for this site">&#128465;</button>
+                <button id="kfox-btn-info" title="Model info">&#9432;</button>
+                <button id="kfox-btn-settings" title="Settings">&#9881;</button>
+            </div>
+        </header>
+
+        
+        <div id="kfox-origin-bar">No page active</div>
+
+        
+        <div id="kfox-status">Ready</div>
+
+        
+        <div id="kfox-settings" class="kfox-hidden">
+            <div class="kfox-setting-group">
+                <label for="kfox-model-select">Embedding Model</label>
+                <select id="kfox-model-select"></select>
+            </div>
+            <div class="kfox-setting-group">
+                <label for="kfox-inference-select">Inference Model</label>
+                <select id="kfox-inference-select">
+                    <option value="gemini-nano">Gemini Nano</option>
+                </select>
+            </div>            <div class="kfox-settings-group">
+                <label for="kfox-summarization-select">Summarization Model:</label>
+                <select id="kfox-summarization-select">
+                    <option value="gemini-nano">Gemini Nano</option>
+                    <option value="t5-small">T5-small</option>
+                    <option value="distilbart-cnn-6-6">DistilBART-CNN-6-6</option>
+                </select>
+            </div>        </div>
+
+        
+        <div id="kfox-chat">
+            <div class="kfox-msg kfox-bot">Welcome to KnowledgeFox! Click ▶ to ingest the current page, then ask questions.</div>
+        </div>
+
+        
+        <div id="kfox-input-area">
+            <input id="kfox-input" type="text" placeholder="Ask about this page…" />
+            <button id="kfox-send-btn">Ask</button>
+        </div>
+
+        
+        <footer id="kfox-footer">
+            <small>Powered by <strong>Transformers.js</strong> &amp; <strong>Gemini Nano</strong></small>
+        </footer>
+    </div>
+</body>
+
+</html>

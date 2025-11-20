@@ -5,3 +5,7 @@
 text/
 node_modules/
 .local/
+build/
+
+scripts
+strip-comments.babel.config.json
