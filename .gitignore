@@ -9,3 +9,4 @@ build/
 
 scripts
 strip-comments.babel.config.json
+gemini_nano_documentation.md
